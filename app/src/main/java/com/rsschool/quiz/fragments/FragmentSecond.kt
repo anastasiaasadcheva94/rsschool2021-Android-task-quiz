@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.RadioButton
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentQuizBinding
@@ -20,6 +23,7 @@ class FragmentSecond : Fragment() {
     private val binding get() = _binding!!
     private lateinit var onBackPressedListener: OnBackPressedListener
     private lateinit var fragmentListener: FragmentListener
+    private var score: Int = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,6 +40,12 @@ class FragmentSecond : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val window = activity?.window
+        window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window?.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.yellow_100_dark)
+
+        context?.theme?.applyStyle(R.style.Theme_Quiz_Second, true)
+
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -58,10 +68,18 @@ class FragmentSecond : Fragment() {
             }
         }
 
-        binding.radioGroup.setOnCheckedChangeListener { group, checkedId ->
-            binding.nextButton.setOnClickListener {
-                fragmentListener.third()
+        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            if (checkedId == R.id.option_four) {
+                score = 20
             }
+
+            binding.nextButton.setOnClickListener {
+                fragmentListener.second(FragmentThird.newInstance(listQuestion[position].id, listQuestion[position], score))
+            }
+        }
+
+        binding.nextButton.setOnClickListener {
+            Toast.makeText(activity, "Nothing selected", Toast.LENGTH_SHORT).show()
         }
 
         binding.previousButton.setOnClickListener {
@@ -74,10 +92,9 @@ class FragmentSecond : Fragment() {
         _binding = null
     }
 
-
     companion object {
         @JvmStatic
-        fun newInstance(id: Int, question: Question, themeQuizFirst: Int): FragmentSecond {
+        fun newInstance(id: Int, question: Question, score:Int): FragmentSecond {
             val fragment = FragmentSecond()
             val args = Bundle()
             fragment.arguments = args
@@ -85,20 +102,5 @@ class FragmentSecond : Fragment() {
         }
 
         private const val SCORE = "SCORE"
-        private const val THEME = "THEME"
     }
-/*    companion object {
-        @JvmStatic
-        fun newInstance(score: String, theme:Int): FragmentSecond {
-            val fragment = FragmentSecond()
-            val args = Bundle()
-            args.putString(SCORE, score)
-            args.putInt(THEME, theme)
-            fragment.arguments = args
-            return fragment
-        }
-
-        private const val SCORE = "SCORE"
-        private const val THEME = "THEME"
-    }*/
 }

@@ -17,7 +17,6 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
     private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
-//        setTheme(R.style.Theme_Quiz_Second)//Меняем тему активити вызывать здесь метод смены темы when
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
         val startQuiz: Fragment = FragmentFirst.newInstance(
             listQuestion[position].id,
             listQuestion[position],
-            R.style.Theme_Quiz_First
         )
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, startQuiz)
@@ -36,84 +34,15 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
             .commit()
     }
 
-    private fun openSecondFragment() {
-        val secondFragment: Fragment = FragmentSecond.newInstance(
-            listQuestion[position].id,
-            listQuestion[position],
-            R.style.Theme_Quiz_Second
-        )
+    private fun openSecondFragment(nextFragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.container, secondFragment)
+            .replace(R.id.container, nextFragment)
             .addToBackStack(null)
             .commit()
     }
 
-    private fun openThirdFragment() {
-        val secondFragment: Fragment = FragmentThird.newInstance(
-            listQuestion[position].id,
-            listQuestion[position],
-            R.style.Theme_Quiz_Third
-        )
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, secondFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun openFourthFragment() {
-        val secondFragment: Fragment = FragmentFourth.newInstance(
-            listQuestion[position].id,
-            listQuestion[position],
-            R.style.Theme_Quiz_Fourth
-        )
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, secondFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun openFivesFragment() {
-        val secondFragment: Fragment = FragmentFives.newInstance(
-            listQuestion[position].id,
-            listQuestion[position],
-            R.style.Theme_Quiz_Fives
-        )
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, secondFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun openResultFragment() {
-        val resultFragment: Fragment = FragmentResult.newInstance(
-            listQuestion[position].id,
-            listQuestion[position],
-            R.style.Theme_Quiz_First
-        )
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, resultFragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    override fun second() {
-        openSecondFragment()
-    }
-
-    override fun third() {
-        openThirdFragment()
-    }
-
-    override fun fourth() {
-        openFourthFragment()
-    }
-
-    override fun fives() {
-        openFivesFragment()
-    }
-
-    override fun result() {
-        openResultFragment()
+    override fun second(nextFragment: Fragment) {
+        openSecondFragment(nextFragment)
     }
 
     override fun onBackPressed() {
@@ -134,8 +63,13 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
     }
 
     override fun restart() {
-        finish()
-        startActivity(intent)
+        val startQuiz: Fragment = FragmentFirst.newInstance(
+            0,
+            listQuestion[position]
+        )
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.container, startQuiz)
+            .commit()
     }
 
     override fun closeApp() {

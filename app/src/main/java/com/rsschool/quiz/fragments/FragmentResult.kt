@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentResultBinding
 import com.rsschool.quiz.interfaces.ButtonListener
 import com.rsschool.quiz.interfaces.FragmentListener
@@ -34,6 +37,12 @@ class FragmentResult : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        val window = activity?.window
+        window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
+        window?.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
+
+        context?.theme?.applyStyle(R.style.Theme_Quiz_First, true)
+
         _binding = FragmentResultBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -67,7 +76,7 @@ class FragmentResult : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(id: Int, question: Question, themeQuizFirst: Int): FragmentResult {
+        fun newInstance(id: Int, question: Question, score:Int): FragmentResult {
             val fragment = FragmentResult()
             val args = Bundle()
             fragment.arguments = args
@@ -75,20 +84,5 @@ class FragmentResult : Fragment() {
         }
 
         private const val SCORE = "SCORE"
-        private const val THEME = "THEME"
     }
-/*    companion object {
-        @JvmStatic
-        fun newInstance(score: String, theme:Int): FragmentSecond {
-            val fragment = FragmentSecond()
-            val args = Bundle()
-            args.putString(SCORE, score)
-            args.putInt(THEME, theme)
-            fragment.arguments = args
-            return fragment
-        }
-
-        private const val SCORE = "SCORE"
-        private const val THEME = "THEME"
-    }*/
 }

@@ -1,9 +1,7 @@
 package com.rsschool.quiz.interfaces
 
+import androidx.fragment.app.Fragment
+
 interface FragmentListener {
-    fun second()
-    fun third()
-    fun fourth()
-    fun fives()
-    fun result()
+    fun second(nextFragment: Fragment)
 }
