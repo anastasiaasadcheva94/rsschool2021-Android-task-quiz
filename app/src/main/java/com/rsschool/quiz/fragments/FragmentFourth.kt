@@ -53,13 +53,17 @@ class FragmentFourth : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val radioGroup = binding.radioGroup
+        val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
 
         val position = 3
 
-            binding.toolbar.title = "Question ${listQuestion[position].id}"
+        toolbar.title = "Question ${listQuestion[position].id}"
+        toolbar.setNavigationOnClickListener {
+            onBackPressedListener.onBackPressed()
+        }
 
-            binding.question.text = listQuestion[position].question
+        binding.question.text = listQuestion[position].question
 
         for (i in 0 until radioGroup.childCount) {
             val radioButton: View = radioGroup.getChildAt(i)
@@ -74,7 +78,13 @@ class FragmentFourth : Fragment() {
             }
 
             binding.nextButton.setOnClickListener {
-                fragmentListener.second(FragmentFives.newInstance(listQuestion[position].id, listQuestion[position], score))
+                fragmentListener.second(
+                    FragmentFives.newInstance(
+                        listQuestion[position].id,
+                        listQuestion[position],
+                        score
+                    )
+                )
             }
         }
 
@@ -95,7 +105,7 @@ class FragmentFourth : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(id: Int, question: Question, score:Int): FragmentFourth {
+        fun newInstance(id: Int, question: Question, score: Int): FragmentFourth {
             val fragment = FragmentFourth()
             val args = Bundle()
             fragment.arguments = args

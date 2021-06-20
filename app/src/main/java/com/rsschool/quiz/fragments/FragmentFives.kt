@@ -55,11 +55,15 @@ class FragmentFives : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val radioGroup = binding.radioGroup
+        val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
 
         val position = 4
 
-        binding.toolbar.title = "Question ${listQuestion[position].id}"
+        toolbar.title = "Question ${listQuestion[position].id}"
+        toolbar.setNavigationOnClickListener {
+            onBackPressedListener.onBackPressed()
+        }
 
         binding.question.text = listQuestion[position].question
 

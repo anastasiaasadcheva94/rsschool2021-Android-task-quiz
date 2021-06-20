@@ -53,10 +53,12 @@ class FragmentFirst : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val radioGroup = binding.radioGroup
+        val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
         val position = 0
 
-        binding.toolbar.title = "Question ${listQuestion[position].id}"
+        toolbar.title = "Question ${listQuestion[position].id}"
+        toolbar.navigationIcon = null
 
         binding.question.text = listQuestion[position].question
 

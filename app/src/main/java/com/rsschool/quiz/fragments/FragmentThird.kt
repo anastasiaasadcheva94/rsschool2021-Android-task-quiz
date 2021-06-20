@@ -42,7 +42,8 @@ class FragmentThird : Fragment() {
     ): View? {
         val window = activity?.window
         window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window?.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.light_green_100_dark)
+        window?.statusBarColor =
+            ContextCompat.getColor(requireActivity(), R.color.light_green_100_dark)
 
         context?.theme?.applyStyle(R.style.Theme_Quiz_Third, true)
 
@@ -53,13 +54,18 @@ class FragmentThird : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val radioGroup = binding.radioGroup
+        val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
 
         val position = 2
 
-            binding.toolbar.title = "Question ${listQuestion[position].id}"
+        toolbar.title = "Question ${listQuestion[position].id}"
 
-            binding.question.text = listQuestion[position].question
+        toolbar.setNavigationOnClickListener {
+            onBackPressedListener.onBackPressed()
+        }
+
+        binding.question.text = listQuestion[position].question
 
         for (i in 0 until radioGroup.childCount) {
             val radioButton: View = radioGroup.getChildAt(i)
@@ -74,7 +80,13 @@ class FragmentThird : Fragment() {
             }
 
             binding.nextButton.setOnClickListener {
-                fragmentListener.second(FragmentFourth.newInstance(listQuestion[position].id, listQuestion[position], score))
+                fragmentListener.second(
+                    FragmentFourth.newInstance(
+                        listQuestion[position].id,
+                        listQuestion[position],
+                        score
+                    )
+                )
             }
         }
 
@@ -95,7 +107,7 @@ class FragmentThird : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(id: Int, question: Question, score:Int): FragmentThird {
+        fun newInstance(id: Int, question: Question, score: Int): FragmentThird {
             val fragment = FragmentThird()
             val args = Bundle()
 
