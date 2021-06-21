@@ -24,7 +24,7 @@ class FragmentFives : Fragment() {
     private val binding get() = _binding!!
     private lateinit var onBackPressedListener: OnBackPressedListener
     private lateinit var fragmentListener: FragmentListener
-    private lateinit var userOption: String
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,7 +40,7 @@ class FragmentFives : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val window = activity?.window
         window?.statusBarColor =
             ContextCompat.getColor(requireActivity(), R.color.deep_purple_100_dark)
@@ -80,11 +80,6 @@ class FragmentFives : Fragment() {
 
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
 
-                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
-                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
-                val text = checkBtn.text.toString()
-                userOption = text
-
                 nextButton.isEnabled = true
 
                 nextButton.setOnClickListener {
@@ -103,7 +98,6 @@ class FragmentFives : Fragment() {
                 onBackPressedListener.onBackPressed()
             }
         }
-
     }
 
     override fun onDestroyView() {
@@ -111,19 +105,15 @@ class FragmentFives : Fragment() {
         _binding = null
     }
 
-
     companion object {
         fun newInstance(score: Int): FragmentFives {
             val fragment = FragmentFives()
             fragment.arguments = Bundle().apply {
-//                val option = ""
-//                putString(OPTION, option)
                 putInt(SCORE, score)
             }
             return fragment
         }
 
-        private const val OPTION = "OPTION"
         private const val SCORE = "SCORE"
     }
 }

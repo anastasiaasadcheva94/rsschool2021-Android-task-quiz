@@ -23,7 +23,6 @@ class FragmentThird : Fragment() {
     private val binding get() = _binding!!
     private lateinit var onBackPressedListener: OnBackPressedListener
     private lateinit var fragmentListener: FragmentListener
-    private lateinit var userOption: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,7 +38,7 @@ class FragmentThird : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val window = activity?.window
         window?.statusBarColor =
             ContextCompat.getColor(requireActivity(), R.color.light_green_100_dark)
@@ -55,7 +54,7 @@ class FragmentThird : Fragment() {
         val radioGroup = binding.radioGroup
         val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
-        var score:Int
+        var score: Int
 
         val position = 2
 
@@ -74,15 +73,10 @@ class FragmentThird : Fragment() {
             }
         }
 
-        with(binding){
+        with(binding) {
             nextButton.isEnabled = false
 
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
-                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
-                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
-                val text = checkBtn.text.toString()
-
-                userOption = text
 
                 nextButton.isEnabled = true
 
@@ -113,19 +107,15 @@ class FragmentThird : Fragment() {
         _binding = null
     }
 
-
     companion object {
         fun newInstance(score: Int): FragmentThird {
             val fragment = FragmentThird()
-            fragment.arguments = Bundle().apply{
-                val option = ""
-                putString(OPTION, option)
+            fragment.arguments = Bundle().apply {
                 putInt(SCORE, score)
             }
             return fragment
         }
 
-        private const val OPTION = "OPTION"
         private const val SCORE = "SCORE"
     }
 }

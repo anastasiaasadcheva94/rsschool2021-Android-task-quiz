@@ -24,7 +24,7 @@ class FragmentFirst : Fragment() {
     private var _binding: FragmentQuizBinding? = null
     private val binding get() = _binding!!
     private lateinit var fragmentListener: FragmentListener
-    private lateinit var userOption: String
+//    private lateinit var userOption: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,7 +40,8 @@ class FragmentFirst : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+//        change theme fragment
         val window = activity?.window
         window?.statusBarColor =
             ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
@@ -60,11 +61,16 @@ class FragmentFirst : Fragment() {
 
         val position = 0
 
+//      change toolbar title
         toolbar.title = "Question ${listQuestion[position].id}"
+
+//      remove toolbar back button
         toolbar.navigationIcon = null
 
+//      add a question by position
         binding.question.text = listQuestion[position].question
 
+//      add a options by position to radio buttons
         for (i in 0 until radioGroup.childCount) {
             val radioButton: View = radioGroup.getChildAt(i)
             if (radioButton is RadioButton) {
@@ -73,24 +79,28 @@ class FragmentFirst : Fragment() {
         }
 
         with(binding) {
+//          deactivate next button
             nextButton.isEnabled = false
 
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
-                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
-                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
-                val text = checkBtn.text.toString()
+//                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
+//                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
+//                val text = checkBtn.text.toString()
+//                userOption = text
 
-                userOption = text
 
+//              activate next button when any radio button checked
                 nextButton.isEnabled = true
 
                 nextButton.setOnClickListener {
+//              check the selected answer option
                     if (checkedId == R.id.option_four) {
                         score += 1
                     } else {
                         score = 0
                     }
 
+//                  move on to the next fragment
                     fragmentListener.second(
                         FragmentSecond.newInstance(
                             score
@@ -98,9 +108,10 @@ class FragmentFirst : Fragment() {
                     )
                 }
             }
+
+//          deactivate previous button
             previousButton.isEnabled = false
         }
-
     }
 
     override fun onDestroyView() {
@@ -114,14 +125,11 @@ class FragmentFirst : Fragment() {
             fragment.arguments = Bundle().apply {
                 putString(QUESTION, question.toString())
                 putInt(SCORE, score)
-
-//                putSerializable(OPTION, question as Serializable)
             }
             return fragment
         }
 
         private const val QUESTION = "QUESTION"
-        private const val OPTION = "OPTION"
         private const val SCORE = "SCORE"
     }
 }

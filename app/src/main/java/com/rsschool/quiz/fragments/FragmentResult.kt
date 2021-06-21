@@ -35,10 +35,11 @@ class FragmentResult : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val window = activity?.window
 
-        window?.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
+        window?.statusBarColor =
+            ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
 
         context?.theme?.applyStyle(R.style.Theme_Quiz_First, true)
 
@@ -78,7 +79,7 @@ class FragmentResult : Fragment() {
     companion object {
         fun newInstance(score: Int): FragmentResult {
             val fragment = FragmentResult()
-            fragment.arguments = Bundle().apply{
+            fragment.arguments = Bundle().apply {
                 putInt(SCORE, score)
             }
             return fragment
