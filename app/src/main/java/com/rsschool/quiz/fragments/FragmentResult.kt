@@ -6,22 +6,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentResultBinding
 import com.rsschool.quiz.interfaces.ButtonListener
 import com.rsschool.quiz.interfaces.FragmentListener
-import com.rsschool.quiz.interfaces.OnBackPressedListener
 import com.rsschool.quiz.questions.ListQuestions
-import com.rsschool.quiz.questions.Question
 
 class FragmentResult : Fragment() {
     private var _binding: FragmentResultBinding? = null
     private val binding get() = _binding!!
     private lateinit var buttonListener: ButtonListener
     private lateinit var fragmentListener: FragmentListener
+    var score = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -54,12 +52,12 @@ class FragmentResult : Fragment() {
         val listQuestion = ListQuestions.listQuestions
 
         val count = arguments?.get(SCORE) as Int
-        val score = (count.toDouble() / listQuestion.size) * 100
+        score = ((count.toDouble() / listQuestion.size) * 100).toInt()
 
-        binding.result.text = "Your result ${score.toInt()}%"
+        binding.result.text = "Your result ${score}%"
 
         binding.shareBtn.setOnClickListener {
-            buttonListener.shareResult()
+            buttonListener.shareResult(score)
         }
 
         binding.backBtn.setOnClickListener {
@@ -81,14 +79,12 @@ class FragmentResult : Fragment() {
         fun newInstance(score: Int): FragmentResult {
             val fragment = FragmentResult()
             fragment.arguments = Bundle().apply{
-                val option = ""
-                putString(OPTION, option)
                 putInt(SCORE, score)
             }
             return fragment
         }
 
         private const val OPTION = "OPTION"
-        private const val SCORE = "SCORE"
+        const val SCORE = "SCORE"
     }
 }

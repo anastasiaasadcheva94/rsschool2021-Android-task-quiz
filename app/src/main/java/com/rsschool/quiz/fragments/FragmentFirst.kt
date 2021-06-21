@@ -17,6 +17,7 @@ import com.rsschool.quiz.databinding.FragmentQuizBinding
 import com.rsschool.quiz.interfaces.FragmentListener
 import com.rsschool.quiz.questions.ListQuestions
 import com.rsschool.quiz.questions.Question
+import java.io.Serializable
 
 
 class FragmentFirst : Fragment() {
@@ -72,11 +73,9 @@ class FragmentFirst : Fragment() {
         }
 
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-
             val idBtn: Int = binding.radioGroup.checkedRadioButtonId
             val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
             val text = checkBtn.text.toString()
-
 
             binding.nextButton.setOnClickListener {
                 if (checkedId == R.id.option_four) {
@@ -112,9 +111,9 @@ class FragmentFirst : Fragment() {
             val fragment = FragmentFirst()
             fragment.arguments = Bundle().apply {
                 putString(QUESTION, question.toString())
-                val option = ""
-                putString(OPTION, option)
                 putInt(SCORE, score)
+
+//                putSerializable(OPTION, question as Serializable)
             }
             return fragment
         }

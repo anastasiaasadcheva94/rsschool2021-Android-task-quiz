@@ -2,7 +2,6 @@ package com.rsschool.quiz.questions
 
 class ListQuestions {
     companion object {
-
         val listQuestions = arrayOf(
             Question(
                 1,

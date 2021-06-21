@@ -53,14 +53,14 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
         }
     }
 
-    override fun shareResult() {
-        val sharingIntent = Intent(Intent.ACTION_SEND)
-        sharingIntent.type = "text/plain"
-        val shareBody = "Here is the share content body (result test)"
-        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Quiz result")
-        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
-        startActivity(Intent.createChooser(sharingIntent, "Share via :"))
-    }
+//    override fun shareResult() {
+//        val sharingIntent = Intent(Intent.ACTION_SEND)
+//        sharingIntent.type = "text/plain"
+//        val shareBody = "Here is the share content body (result test)"
+//        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Quiz result")
+//        sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody)
+//        startActivity(Intent.createChooser(sharingIntent, "Share via :"))
+//    }
 
     override fun restart() {
         val startQuiz: Fragment = FragmentFirst.newInstance(
@@ -75,5 +75,31 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
     override fun closeApp() {
         finish()
         exitProcess(0)
+    }
+
+    override fun shareResult(score: Int) {
+
+        fun getMessage(score:Int): String {
+            return with(StringBuilder()) {
+                appendLine("Your result: ${score}%")
+                appendLine()
+                ListQuestions.listQuestions.forEach { q ->
+                    appendLine("${q.id}) ${q.question}")
+                    appendLine("\n")
+//                    appendLine("Your answer: ${}")
+                    appendLine("\n\n")
+                }
+                toString()
+            }
+        }
+
+        val sharingIntent = Intent(Intent.ACTION_SEND)
+        sharingIntent.type = "text/plain"
+        sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Quiz results")
+        sharingIntent.putExtra(
+            Intent.EXTRA_TEXT,
+            getMessage(score)
+        )
+        startActivity(Intent.createChooser(sharingIntent, "Share via :"))
     }
 }

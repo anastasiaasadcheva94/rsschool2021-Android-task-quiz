@@ -1,11 +1,12 @@
 package com.rsschool.quiz.fragments
 
 import android.content.Context
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -15,6 +16,7 @@ import com.rsschool.quiz.databinding.FragmentQuizBinding
 import com.rsschool.quiz.interfaces.FragmentListener
 import com.rsschool.quiz.interfaces.OnBackPressedListener
 import com.rsschool.quiz.questions.ListQuestions
+
 
 class FragmentSecond : Fragment() {
     private var _binding: FragmentQuizBinding? = null
@@ -84,6 +86,8 @@ class FragmentSecond : Fragment() {
                 }
 
                 userOption = text
+                val option = arguments?.putInt(OPTION, idBtn)
+
 
                 fragmentListener.second(FragmentThird.newInstance(score))
             }
@@ -107,8 +111,6 @@ class FragmentSecond : Fragment() {
         fun newInstance(score: Int): FragmentSecond{
             val fragment = FragmentSecond()
             fragment.arguments = Bundle().apply{
-                val option = ""
-                putString(OPTION, option)
                 putInt(SCORE, score)
             }
             return fragment
