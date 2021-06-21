@@ -75,7 +75,7 @@ class FragmentFives : Fragment() {
             }
         }
         with(binding) {
-            nextButton.text = "Result"
+            nextButton.text = "Submit"
             nextButton.isEnabled = false
 
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
