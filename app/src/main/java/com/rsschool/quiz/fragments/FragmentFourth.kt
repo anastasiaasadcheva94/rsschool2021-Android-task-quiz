@@ -72,36 +72,37 @@ class FragmentFourth : Fragment() {
             }
         }
 
-        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            val idBtn: Int = binding.radioGroup.checkedRadioButtonId
-            val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
-            val text = checkBtn.text.toString()
+        with(binding){
+            nextButton.isEnabled = false
 
-            binding.nextButton.setOnClickListener {
-                if (checkedId == R.id.option_one) {
-                    score = arguments?.get(SCORE) as Int
-                    score += 1
-                } else {
-                    score = arguments?.get(SCORE) as Int
-                }
-
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
+                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
+                val text = checkBtn.text.toString()
                 userOption = text
 
-                fragmentListener.second(
-                    FragmentFives.newInstance(
-                        score
+                nextButton.isEnabled = true
+
+                nextButton.setOnClickListener {
+                    if (checkedId == R.id.option_one) {
+                        score = arguments?.get(SCORE) as Int
+                        score += 1
+                    } else {
+                        score = arguments?.get(SCORE) as Int
+                    }
+
+                    fragmentListener.second(
+                        FragmentFives.newInstance(
+                            score
+                        )
                     )
-                )
+                }
+            }
+            previousButton.setOnClickListener {
+                onBackPressedListener.onBackPressed()
             }
         }
 
-        binding.nextButton.setOnClickListener {
-            Toast.makeText(activity, "Nothing selected", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.previousButton.setOnClickListener {
-            onBackPressedListener.onBackPressed()
-        }
     }
 
     override fun onDestroyView() {

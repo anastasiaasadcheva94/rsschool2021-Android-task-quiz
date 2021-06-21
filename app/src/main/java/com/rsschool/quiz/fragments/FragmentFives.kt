@@ -42,7 +42,8 @@ class FragmentFives : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val window = activity?.window
-        window?.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.deep_purple_100_dark)
+        window?.statusBarColor =
+            ContextCompat.getColor(requireActivity(), R.color.deep_purple_100_dark)
 
         context?.theme?.applyStyle(R.style.Theme_Quiz_Fives, true)
 
@@ -56,7 +57,7 @@ class FragmentFives : Fragment() {
         val radioGroup = binding.radioGroup
         val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
-        var score:Int
+        var score: Int
 
         val position = 4
 
@@ -73,35 +74,36 @@ class FragmentFives : Fragment() {
                 radioButton.text = listQuestion[position].options[i]
             }
         }
+        with(binding) {
+            nextButton.text = "Result"
+            nextButton.isEnabled = false
 
-        binding.nextButton.text = "Result"
-        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
 
-            val idBtn: Int = binding.radioGroup.checkedRadioButtonId
-            val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
-            val text = checkBtn.text.toString()
-
-            binding.nextButton.setOnClickListener {
-                if (checkedId == R.id.option_one) {
-                    score = arguments?.get(SCORE) as Int
-                    score += 1
-                } else {
-                    score = arguments?.get(SCORE) as Int
-                }
-
+                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
+                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
+                val text = checkBtn.text.toString()
                 userOption = text
 
-                fragmentListener.second(FragmentResult.newInstance(score))
+                nextButton.isEnabled = true
+
+                nextButton.setOnClickListener {
+                    if (checkedId == R.id.option_one) {
+                        score = arguments?.get(SCORE) as Int
+                        score += 1
+                    } else {
+                        score = arguments?.get(SCORE) as Int
+                    }
+
+                    fragmentListener.second(FragmentResult.newInstance(score))
+                }
+            }
+
+            previousButton.setOnClickListener {
+                onBackPressedListener.onBackPressed()
             }
         }
 
-        binding.nextButton.setOnClickListener {
-            Toast.makeText(activity, "Nothing selected", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.previousButton.setOnClickListener {
-            onBackPressedListener.onBackPressed()
-        }
     }
 
     override fun onDestroyView() {
@@ -113,7 +115,7 @@ class FragmentFives : Fragment() {
     companion object {
         fun newInstance(score: Int): FragmentFives {
             val fragment = FragmentFives()
-            fragment.arguments = Bundle().apply{
+            fragment.arguments = Bundle().apply {
 //                val option = ""
 //                putString(OPTION, option)
                 putInt(SCORE, score)

@@ -23,7 +23,8 @@ class FragmentSecond : Fragment() {
     private val binding get() = _binding!!
     private lateinit var onBackPressedListener: OnBackPressedListener
     private lateinit var fragmentListener: FragmentListener
-    private lateinit var userOption: String
+//    private lateinit var userOption: String
+    private var userOption: Int = 0
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -71,34 +72,40 @@ class FragmentSecond : Fragment() {
                 radioButton.text = listQuestion[position].options[i]
             }
         }
+        with(binding){
+            nextButton.isEnabled = false
 
-        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            val idBtn: Int = binding.radioGroup.checkedRadioButtonId
-            val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
-            val text = checkBtn.text.toString()
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
+                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
+                val text = checkBtn.text.toString()
 
-            binding.nextButton.setOnClickListener {
-                if (checkedId == R.id.option_one) {
-                    score = arguments?.get(SCORE) as Int
-                    score += 1
-                } else {
-                    score = arguments?.get(SCORE) as Int
+                nextButton.isEnabled = true
+
+                arguments?.putInt(OPTION, idBtn)
+                userOption = requireArguments().get(OPTION) as Int
+
+                nextButton.setOnClickListener {
+                    if (checkedId == R.id.option_one) {
+                        score = arguments?.get(SCORE) as Int
+                        score += 1
+                    } else {
+                        score = arguments?.get(SCORE) as Int
+                    }
+
+//                    userOption = text
+
+                    fragmentListener.second(FragmentThird.newInstance(score))
                 }
-
-                userOption = text
-                val option = arguments?.putInt(OPTION, idBtn)
-
-
-                fragmentListener.second(FragmentThird.newInstance(score))
             }
-        }
 
-        binding.nextButton.setOnClickListener {
-            Toast.makeText(activity, "Nothing selected", Toast.LENGTH_SHORT).show()
-        }
+            nextButton.setOnClickListener {
+                Toast.makeText(activity, "Nothing selected", Toast.LENGTH_SHORT).show()
+            }
 
-        binding.previousButton.setOnClickListener {
-            onBackPressedListener.onBackPressed()
+            previousButton.setOnClickListener {
+                onBackPressedListener.onBackPressed()
+            }
         }
     }
 

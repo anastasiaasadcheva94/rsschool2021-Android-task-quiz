@@ -72,33 +72,35 @@ class FragmentFirst : Fragment() {
             }
         }
 
-        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            val idBtn: Int = binding.radioGroup.checkedRadioButtonId
-            val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
-            val text = checkBtn.text.toString()
+        with(binding) {
+            nextButton.isEnabled = false
 
-            binding.nextButton.setOnClickListener {
-                if (checkedId == R.id.option_four) {
-                    score += 1
-                }else{
-                    score = 0
-                }
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
+                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
+                val text = checkBtn.text.toString()
 
                 userOption = text
 
-                fragmentListener.second(
-                    FragmentSecond.newInstance(
-                        score
+                nextButton.isEnabled = true
+
+                nextButton.setOnClickListener {
+                    if (checkedId == R.id.option_four) {
+                        score += 1
+                    } else {
+                        score = 0
+                    }
+
+                    fragmentListener.second(
+                        FragmentSecond.newInstance(
+                            score
+                        )
                     )
-                )
+                }
             }
+            previousButton.isEnabled = false
         }
 
-        binding.nextButton.setOnClickListener {
-            Toast.makeText(activity, "Nothing selected", Toast.LENGTH_SHORT).show()
-        }
-
-        binding.previousButton.visibility = View.GONE
     }
 
     override fun onDestroyView() {
