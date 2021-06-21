@@ -24,7 +24,7 @@ class FragmentFives : Fragment() {
     private val binding get() = _binding!!
     private lateinit var onBackPressedListener: OnBackPressedListener
     private lateinit var fragmentListener: FragmentListener
-    private var score: Int = 0
+    private lateinit var userOption: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -42,7 +42,6 @@ class FragmentFives : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val window = activity?.window
-        window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window?.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.deep_purple_100_dark)
 
         context?.theme?.applyStyle(R.style.Theme_Quiz_Fives, true)
@@ -57,6 +56,7 @@ class FragmentFives : Fragment() {
         val radioGroup = binding.radioGroup
         val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
+        var score:Int
 
         val position = 4
 
@@ -76,12 +76,22 @@ class FragmentFives : Fragment() {
 
         binding.nextButton.text = "Result"
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.option_four) {
-                score = 20
-            }
+
+            val idBtn: Int = binding.radioGroup.checkedRadioButtonId
+            val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
+            val text = checkBtn.text.toString()
 
             binding.nextButton.setOnClickListener {
-                fragmentListener.second(FragmentResult.newInstance(listQuestion[position].id, listQuestion[position], score))
+                if (checkedId == R.id.option_one) {
+                    score = arguments?.get(SCORE) as Int
+                    score += 1
+                } else {
+                    score = arguments?.get(SCORE) as Int
+                }
+
+                userOption = text
+
+                fragmentListener.second(FragmentResult.newInstance(score))
             }
         }
 
@@ -101,28 +111,17 @@ class FragmentFives : Fragment() {
 
 
     companion object {
-        @JvmStatic
-        fun newInstance(id: Int, question: Question, score:Int): FragmentFives {
+        fun newInstance(score: Int): FragmentFives {
             val fragment = FragmentFives()
-            val args = Bundle()
-            fragment.arguments = args
+            fragment.arguments = Bundle().apply{
+//                val option = ""
+//                putString(OPTION, option)
+                putInt(SCORE, score)
+            }
             return fragment
         }
 
+        private const val OPTION = "OPTION"
         private const val SCORE = "SCORE"
     }
-/*    companion object {
-        @JvmStatic
-        fun newInstance(score: String, theme:Int): FragmentSecond {
-            val fragment = FragmentSecond()
-            val args = Bundle()
-            args.putString(SCORE, score)
-            args.putInt(THEME, theme)
-            fragment.arguments = args
-            return fragment
-        }
-
-        private const val SCORE = "SCORE"
-        private const val THEME = "THEME"
-    }*/
 }

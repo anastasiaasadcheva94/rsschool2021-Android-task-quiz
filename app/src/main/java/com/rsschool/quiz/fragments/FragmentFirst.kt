@@ -10,6 +10,7 @@ import android.view.WindowManager
 import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.rsschool.quiz.R
 import com.rsschool.quiz.databinding.FragmentQuizBinding
@@ -22,8 +23,7 @@ class FragmentFirst : Fragment() {
     private var _binding: FragmentQuizBinding? = null
     private val binding get() = _binding!!
     private lateinit var fragmentListener: FragmentListener
-    private var score: Int = 0
-
+    private lateinit var userOption: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -41,8 +41,8 @@ class FragmentFirst : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val window = activity?.window
-        window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window?.statusBarColor = ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
+        window?.statusBarColor =
+            ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
 
         context?.theme?.applyStyle(R.style.Theme_Quiz_First, true)
 
@@ -55,6 +55,8 @@ class FragmentFirst : Fragment() {
         val radioGroup = binding.radioGroup
         val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
+        var score = 0
+
         val position = 0
 
         toolbar.title = "Question ${listQuestion[position].id}"
@@ -69,17 +71,24 @@ class FragmentFirst : Fragment() {
             }
         }
 
-
         binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
-            if (checkedId == R.id.option_four) {
-                score = 20
-            }
+
+            val idBtn: Int = binding.radioGroup.checkedRadioButtonId
+            val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
+            val text = checkBtn.text.toString()
+
 
             binding.nextButton.setOnClickListener {
+                if (checkedId == R.id.option_four) {
+                    score += 1
+                }else{
+                    score = 0
+                }
+
+                userOption = text
+
                 fragmentListener.second(
                     FragmentSecond.newInstance(
-                        listQuestion[position].id,
-                        listQuestion[position],
                         score
                     )
                 )
@@ -99,16 +108,19 @@ class FragmentFirst : Fragment() {
     }
 
     companion object {
-        fun newInstance(id: Int, question: Question): FragmentFirst {
+        fun newInstance(question: Question, score: Int): FragmentFirst {
             val fragment = FragmentFirst()
-            val args = Bundle()
-            args.putInt(ID, id)
-            args.putString(QUESTION, question.toString())
-            fragment.arguments = args
+            fragment.arguments = Bundle().apply {
+                putString(QUESTION, question.toString())
+                val option = ""
+                putString(OPTION, option)
+                putInt(SCORE, score)
+            }
             return fragment
         }
 
-        private const val ID = "ID"
         private const val QUESTION = "QUESTION"
+        private const val OPTION = "OPTION"
+        private const val SCORE = "SCORE"
     }
 }

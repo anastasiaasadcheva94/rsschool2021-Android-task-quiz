@@ -25,8 +25,8 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
 
     private fun openFirstFragment() {
         val startQuiz: Fragment = FragmentFirst.newInstance(
-            listQuestion[position].id,
             listQuestion[position],
+            0
         )
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, startQuiz)
@@ -64,8 +64,8 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
 
     override fun restart() {
         val startQuiz: Fragment = FragmentFirst.newInstance(
-            0,
-            listQuestion[position]
+            listQuestion[position],
+            0
         )
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, startQuiz)
