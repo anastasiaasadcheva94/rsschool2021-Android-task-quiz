@@ -1,3 +1,4 @@
+/*
 package com.rsschool.quiz.fragments
 
 import android.annotation.SuppressLint
@@ -116,4 +117,4 @@ class FragmentFives : Fragment() {
 
         private const val SCORE = "SCORE"
     }
-}
+}*/

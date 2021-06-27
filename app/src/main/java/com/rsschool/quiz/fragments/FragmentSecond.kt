@@ -1,3 +1,4 @@
+/*
 package com.rsschool.quiz.fragments
 
 import android.content.Context
@@ -118,4 +119,4 @@ class FragmentSecond : Fragment() {
 
         private const val SCORE = "SCORE"
     }
-}
+}*/

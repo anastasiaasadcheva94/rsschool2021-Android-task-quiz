@@ -1,31 +1,25 @@
-/*
 package com.rsschool.quiz.fragments
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import androidx.fragment.app.Fragment
 import com.rsschool.quiz.R
+import com.rsschool.quiz.Themes
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 import com.rsschool.quiz.interfaces.FragmentListener
 import com.rsschool.quiz.questions.ListQuestions
 import com.rsschool.quiz.questions.Question
-import java.io.Serializable
 
-
-class FragmentFirst : Fragment() {
+class FragmentQuiz : Fragment() {
     private var _binding: FragmentQuizBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var fragmentListener: FragmentListener
-//    private lateinit var userOption: String
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -36,13 +30,13 @@ class FragmentFirst : Fragment() {
         }
     }
 
-    @SuppressLint("ResourceAsColor")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 //        change theme fragment
+
         val window = activity?.window
         window?.statusBarColor =
             ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
@@ -55,63 +49,65 @@ class FragmentFirst : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val radioGroup = binding.radioGroup
-        val toolbar = binding.toolbar
         val listQuestion = ListQuestions.listQuestions
-        var score = 0
+        val toolbar = binding.toolbar
+        val radioGroup = binding.radioGroup
+        val nextButton = binding.nextButton
+        val previousButton = binding.previousButton
 
-        val position = 0
-
-//      change toolbar title
-        toolbar.title = "Question ${listQuestion[position].id}"
-
-//      remove toolbar back button
-        toolbar.navigationIcon = null
-
-//      add a question by position
-        binding.question.text = listQuestion[position].question
-
-//      add a options by position to radio buttons
-        for (i in 0 until radioGroup.childCount) {
-            val radioButton: View = radioGroup.getChildAt(i)
-            if (radioButton is RadioButton) {
-                radioButton.text = listQuestion[position].options[i]
-            }
-        }
-
-        with(binding) {
-//          deactivate next button
-            nextButton.isEnabled = false
-
-            radioGroup.setOnCheckedChangeListener { _, checkedId ->
-//                val idBtn: Int = binding.radioGroup.checkedRadioButtonId
-//                val checkBtn: RadioButton = binding.radioGroup.findViewById(idBtn)
-//                val text = checkBtn.text.toString()
-//                userOption = text
+        var score = arguments?.get(SCORE) as Int
+        var position = arguments?.get(POSITION) as Int
 
 
-//              activate next button when any radio button checked
-                nextButton.isEnabled = true
-
-                nextButton.setOnClickListener {
-//              check the selected answer option
-                    if (checkedId == R.id.option_four) {
-                        score += 1
-                    } else {
-                        score = 0
-                    }
-
-//                  move on to the next fragment
-                    fragmentListener.second(
-                        FragmentSecond.newInstance(
-                            score
-                        )
-                    )
+        if (position < listQuestion.size) {
+            when {
+                listQuestion[position].id == 1 -> {
+                    toolbar.navigationIcon = null
+                    nextButton.isEnabled = false
+                    previousButton.isEnabled = false
+                }
+                listQuestion[position] == listQuestion.last() -> {
+                    nextButton.text = getString(R.string.result_btn)
                 }
             }
 
-//          deactivate previous button
-            previousButton.isEnabled = false
+            toolbar.title = "Question ${listQuestion[position].id}"
+            binding.question.text = listQuestion[position].question
+            for (i in 0 until radioGroup.childCount) {
+                val radioButton: View = radioGroup.getChildAt(i)
+                if (radioButton is RadioButton) {
+                    radioButton.text = listQuestion[position].options[i]
+                }
+            }
+
+            nextButton.isEnabled = false
+
+            radioGroup.setOnCheckedChangeListener { _, checkedId ->
+                nextButton.isEnabled = true
+
+                val checkBtn: RadioButton = radioGroup.findViewById(checkedId)
+                val text = checkBtn.text.toString()
+
+                if (text == listQuestion[position].correctAnswer) {
+                    score += 1
+                }
+            }
+
+            nextButton.setOnClickListener {
+                position += 1
+                if (position < listQuestion.size) {
+                    fragmentListener.second(
+                        newInstance(
+                            position,
+                            score
+                        )
+                    )
+                } else {
+                    fragmentListener.second(
+                        FragmentResult.newInstance(score)
+                    )
+                }
+            }
         }
     }
 
@@ -121,17 +117,18 @@ class FragmentFirst : Fragment() {
     }
 
     companion object {
-        fun newInstance(question: Question, score: Int): FragmentFirst {
-            val fragment = FragmentFirst()
+        fun newInstance(position: Int, score: Int): FragmentQuiz {
+            val fragment = FragmentQuiz()
             fragment.arguments = Bundle().apply {
-                putString(QUESTION, question.toString())
+                putInt(POSITION, position)
+//                putString(QUESTION, question.toString())
                 putInt(SCORE, score)
             }
             return fragment
         }
 
         private const val QUESTION = "QUESTION"
+        private const val POSITION = "POSITION"
         private const val SCORE = "SCORE"
     }
 }
-*/

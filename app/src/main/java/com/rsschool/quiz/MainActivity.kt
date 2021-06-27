@@ -24,20 +24,20 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
     }
 
     private fun openFirstFragment() {
-        val startQuiz: Fragment = FragmentFirst.newInstance(
-            listQuestion[position],
+        val startQuiz: Fragment = FragmentQuiz.newInstance(
+            position,
             0
         )
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, startQuiz)
-            .addToBackStack(null)
+//            .addToBackStack(null)
             .commit()
     }
 
     private fun openSecondFragment(nextFragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, nextFragment)
-            .addToBackStack(null)
+//            .addToBackStack(null)
             .commit()
     }
 
@@ -54,8 +54,8 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
     }
 
     override fun restart() {
-        val startQuiz: Fragment = FragmentFirst.newInstance(
-            listQuestion[position],
+        val startQuiz: Fragment = FragmentQuiz.newInstance(
+            position,
             0
         )
         supportFragmentManager.beginTransaction()
