@@ -14,7 +14,7 @@ import com.rsschool.quiz.databinding.FragmentQuizBinding
 import com.rsschool.quiz.interfaces.FragmentListener
 import com.rsschool.quiz.interfaces.OnBackPressedListener
 import com.rsschool.quiz.questions.ListQuestions
-import com.rsschool.quiz.questions.Question
+import kotlin.random.Random
 
 class FragmentQuiz : Fragment() {
     private var _binding: FragmentQuizBinding? = null
@@ -48,6 +48,13 @@ class FragmentQuiz : Fragment() {
 
             val window = activity?.window
             window?.statusBarColor = ContextCompat.getColor(requireActivity(), theme[i].color)
+        } else {
+            val j = Random.nextInt(theme.size)
+
+            context?.theme?.applyStyle(theme[j].theme, true)
+
+            val window = activity?.window
+            window?.statusBarColor = ContextCompat.getColor(requireActivity(), theme[j].color)
         }
 
 
