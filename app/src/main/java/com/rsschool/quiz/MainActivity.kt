@@ -30,14 +30,14 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
         )
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, startQuiz)
-//            .addToBackStack(null)
+            .addToBackStack(null)
             .commit()
     }
 
     private fun openSecondFragment(nextFragment: Fragment) {
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, nextFragment)
-//            .addToBackStack(null)
+            .addToBackStack(null)
             .commit()
     }
 

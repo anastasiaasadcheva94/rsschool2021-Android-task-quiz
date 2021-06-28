@@ -12,6 +12,7 @@ import com.rsschool.quiz.R
 import com.rsschool.quiz.Themes
 import com.rsschool.quiz.databinding.FragmentQuizBinding
 import com.rsschool.quiz.interfaces.FragmentListener
+import com.rsschool.quiz.interfaces.OnBackPressedListener
 import com.rsschool.quiz.questions.ListQuestions
 import com.rsschool.quiz.questions.Question
 
@@ -20,11 +21,13 @@ class FragmentQuiz : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var fragmentListener: FragmentListener
+    private lateinit var onBackPressedListener: OnBackPressedListener
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
         try {
             fragmentListener = context as FragmentListener
+            onBackPressedListener = context as OnBackPressedListener
         } catch (e: Exception) {
             throw RuntimeException("$context must implement QuizFragmentListener")
         }
@@ -108,6 +111,14 @@ class FragmentQuiz : Fragment() {
                     )
                 }
             }
+        }
+
+        toolbar.setNavigationOnClickListener {
+            onBackPressedListener.onBackPressed()
+        }
+
+        previousButton.setOnClickListener {
+            onBackPressedListener.onBackPressed()
         }
     }
 
