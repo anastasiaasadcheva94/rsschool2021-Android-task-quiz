@@ -40,11 +40,16 @@ class FragmentQuiz : Fragment() {
     ): View {
 //        change theme fragment
 
-        val window = activity?.window
-        window?.statusBarColor =
-            ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
+        val theme = Themes.values()
+        val i = arguments?.get(POSITION) as Int
 
-        context?.theme?.applyStyle(R.style.Theme_Quiz_First, true)
+        if(i < theme.size){
+            context?.theme?.applyStyle(theme[i].theme, true)
+
+            val window = activity?.window
+            window?.statusBarColor = ContextCompat.getColor(requireActivity(), theme[i].color)
+        }
+
 
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         return binding.root
