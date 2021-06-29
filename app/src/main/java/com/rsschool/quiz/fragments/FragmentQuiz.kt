@@ -38,20 +38,17 @@ class FragmentQuiz : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-//        change theme fragment
+//        change fragment theme
         val theme = Themes.values()
         val i = arguments?.get(POSITION) as Int
 
         if(i < theme.size){
             context?.theme?.applyStyle(theme[i].theme, true)
-
             val window = activity?.window
             window?.statusBarColor = ContextCompat.getColor(requireActivity(), theme[i].color)
         } else {
             val j = Random.nextInt(theme.size)
-
             context?.theme?.applyStyle(theme[j].theme, true)
-
             val window = activity?.window
             window?.statusBarColor = ContextCompat.getColor(requireActivity(), theme[j].color)
         }
@@ -76,17 +73,19 @@ class FragmentQuiz : Fragment() {
 
 
         if (position < listQuestion.size) {
+//            hide buttons of the first fragment
             when {
                 listQuestion[position].id == 1 -> {
                     toolbar.navigationIcon = null
-                    nextButton.isEnabled = false
                     previousButton.isEnabled = false
                 }
+//            change next button of the last fragment
                 listQuestion[position] == listQuestion.last() -> {
                     nextButton.text = getString(R.string.result_btn)
                 }
             }
 
+//            add values
             toolbar.title = "Question ${listQuestion[position].id}"
             binding.question.text = listQuestion[position].question
             for (i in 0 until radioGroup.childCount) {
@@ -96,22 +95,26 @@ class FragmentQuiz : Fragment() {
                 }
             }
 
+//            hide next button
             nextButton.isEnabled = false
 
             radioGroup.setOnCheckedChangeListener { _, checkedId ->
+//                activate next button
                 nextButton.isEnabled = true
 
+//                check clicked RadioButton
                 val checkBtn: RadioButton = radioGroup.findViewById(checkedId)
                 val text = checkBtn.text.toString()
                 userAnswer.add(text)
 
+//                check if the answer is correct
                 if (text == listQuestion[position].correctAnswer) {
                     score += 1
                 }
 
 //                if (userCheckedId != 0){
 //                    (radioGroup.findViewById(userCheckedId) as RadioButton).isChecked = true
-//                } ???
+//                }
             }
 
             nextButton.setOnClickListener {

@@ -36,13 +36,14 @@ class FragmentResult : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //        change fragment theme
         val window = activity?.window
-
         window?.statusBarColor =
             ContextCompat.getColor(requireActivity(), R.color.deep_orange_100_dark)
 
         context?.theme?.applyStyle(R.style.Theme_Quiz_First, true)
 
+        //        add binding
         _binding = FragmentResultBinding.inflate(inflater, container, false)
         return binding.root
     }
