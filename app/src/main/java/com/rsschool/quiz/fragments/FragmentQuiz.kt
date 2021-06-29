@@ -39,7 +39,6 @@ class FragmentQuiz : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 //        change theme fragment
-
         val theme = Themes.values()
         val i = arguments?.get(POSITION) as Int
 
@@ -57,7 +56,7 @@ class FragmentQuiz : Fragment() {
             window?.statusBarColor = ContextCompat.getColor(requireActivity(), theme[j].color)
         }
 
-
+//        add binding
         _binding = FragmentQuizBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -72,6 +71,8 @@ class FragmentQuiz : Fragment() {
 
         var score = arguments?.get(SCORE) as Int
         var position = arguments?.get(POSITION) as Int
+        val userAnswer = arguments?.getStringArrayList(USER_OPTION) as ArrayList<String>
+//        val userCheckedId = arguments?.get(USER_OPTION_ID) as Int
 
 
         if (position < listQuestion.size) {
@@ -102,10 +103,15 @@ class FragmentQuiz : Fragment() {
 
                 val checkBtn: RadioButton = radioGroup.findViewById(checkedId)
                 val text = checkBtn.text.toString()
+                userAnswer.add(text)
 
                 if (text == listQuestion[position].correctAnswer) {
                     score += 1
                 }
+
+//                if (userCheckedId != 0){
+//                    (radioGroup.findViewById(userCheckedId) as RadioButton).isChecked = true
+//                } ???
             }
 
             nextButton.setOnClickListener {
@@ -114,12 +120,14 @@ class FragmentQuiz : Fragment() {
                     fragmentListener.second(
                         newInstance(
                             position,
-                            score
+                            score,
+                            radioGroup.checkedRadioButtonId,
+                            userAnswer
                         )
                     )
                 } else {
                     fragmentListener.second(
-                        FragmentResult.newInstance(score)
+                        FragmentResult.newInstance(score, userAnswer)
                     )
                 }
             }
@@ -140,18 +148,20 @@ class FragmentQuiz : Fragment() {
     }
 
     companion object {
-        fun newInstance(position: Int, score: Int): FragmentQuiz {
+        fun newInstance(position: Int, score: Int, userOptionId: Int, userOption:ArrayList<String>): FragmentQuiz {
             val fragment = FragmentQuiz()
             fragment.arguments = Bundle().apply {
                 putInt(POSITION, position)
-//                putString(QUESTION, question.toString())
                 putInt(SCORE, score)
+                putInt(USER_OPTION_ID, userOptionId)
+                putStringArrayList(USER_OPTION, userOption)
             }
             return fragment
         }
 
-        private const val QUESTION = "QUESTION"
         private const val POSITION = "POSITION"
         private const val SCORE = "SCORE"
+        private const val USER_OPTION_ID = "USER_OPTION_ID"
+        private const val USER_OPTION = "USER_OPTION"
     }
 }

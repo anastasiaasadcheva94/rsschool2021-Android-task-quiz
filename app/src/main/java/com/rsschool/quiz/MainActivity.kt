@@ -13,7 +13,6 @@ import com.rsschool.quiz.questions.ListQuestions
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListener, ButtonListener {
-    private val listQuestion = ListQuestions.listQuestions
     private var position: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +25,9 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
     private fun openFirstFragment() {
         val startQuiz: Fragment = FragmentQuiz.newInstance(
             position,
-            0
+            0,
+            0,
+            arrayListOf()
         )
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, startQuiz)
@@ -56,7 +57,9 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
     override fun restart() {
         val startQuiz: Fragment = FragmentQuiz.newInstance(
             position,
-            0
+            0,
+            0,
+            arrayListOf()
         )
         supportFragmentManager.beginTransaction()
             .replace(R.id.container, startQuiz)
@@ -68,17 +71,18 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
         exitProcess(0)
     }
 
-
-    override fun shareResult(score: Int) {
+    override fun shareResult(score: Int, userAnswer:ArrayList<String>) {
+        var i = 0
         fun getMessage(score:Int): String {
             return with(StringBuilder()) {
                 appendLine("Your result: ${score}%")
                 appendLine()
-                ListQuestions.listQuestions.forEach { q ->
-                    appendLine("${q.id}) ${q.question}")
+                while (i < ListQuestions.listQuestions.size){
+                    appendLine("${ListQuestions.listQuestions[i].id}) ${ListQuestions.listQuestions[i].question}")
                     appendLine("\n")
-                    appendLine("Your answer: ")
+                    appendLine("Your answer: ${userAnswer[i]}")
                     appendLine("\n\n")
+                    i++
                 }
                 toString()
             }

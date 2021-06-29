@@ -51,6 +51,7 @@ class FragmentResult : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val listQuestion = ListQuestions.listQuestions
+        val userAnswer = arguments?.getStringArrayList(USER_OPTION) as ArrayList<String>
 
         val count = arguments?.get(SCORE) as Int
         score = ((count.toDouble() / listQuestion.size) * 100).toInt()
@@ -58,7 +59,7 @@ class FragmentResult : Fragment() {
         binding.result.text = "Your result ${score}%"
 
         binding.shareBtn.setOnClickListener {
-            buttonListener.shareResult(score)
+            buttonListener.shareResult(score, userAnswer)
         }
 
         binding.backBtn.setOnClickListener {
@@ -77,15 +78,16 @@ class FragmentResult : Fragment() {
 
 
     companion object {
-        fun newInstance(score: Int): FragmentResult {
+        fun newInstance(score: Int, userOption:ArrayList<String>): FragmentResult {
             val fragment = FragmentResult()
             fragment.arguments = Bundle().apply {
                 putInt(SCORE, score)
+                putStringArrayList(USER_OPTION, userOption)
             }
             return fragment
         }
 
-        private const val OPTION = "OPTION"
         const val SCORE = "SCORE"
+        private const val USER_OPTION = "USER_OPTION"
     }
 }
