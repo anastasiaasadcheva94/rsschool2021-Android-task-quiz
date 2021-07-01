@@ -26,7 +26,6 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
         val startQuiz: Fragment = FragmentQuiz.newInstance(
             position,
             0,
-            0,
             arrayListOf()
         )
         supportFragmentManager.beginTransaction()
@@ -58,7 +57,6 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
         val startQuiz: Fragment = FragmentQuiz.newInstance(
             position,
             0,
-            0,
             arrayListOf()
         )
         supportFragmentManager.beginTransaction()
@@ -72,17 +70,15 @@ class MainActivity : AppCompatActivity(), FragmentListener, OnBackPressedListene
     }
 
     override fun shareResult(score: Int, userAnswer:ArrayList<String>) {
-        var i = 0
         fun getMessage(score:Int): String {
             return with(StringBuilder()) {
                 appendLine("Your result: ${score}%")
                 appendLine()
-                while (i < ListQuestions.listQuestions.size){
-                    appendLine("${ListQuestions.listQuestions[i].id}) ${ListQuestions.listQuestions[i].question}")
+                ListQuestions.listQuestions.forEachIndexed { index, question ->
+                    appendLine("${question.id}) ${question.question}")
                     appendLine("\n")
-                    appendLine("Your answer: ${userAnswer[i]}")
+                    appendLine("Your answer: ${userAnswer[index]}")
                     appendLine("\n\n")
-                    i++
                 }
                 toString()
             }

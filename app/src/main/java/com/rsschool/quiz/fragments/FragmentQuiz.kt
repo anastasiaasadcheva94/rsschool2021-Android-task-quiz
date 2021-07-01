@@ -69,8 +69,6 @@ class FragmentQuiz : Fragment() {
         var score = arguments?.get(SCORE) as Int
         var position = arguments?.get(POSITION) as Int
         val userAnswer = arguments?.getStringArrayList(USER_OPTION) as ArrayList<String>
-//        val userCheckedId = arguments?.get(USER_OPTION_ID) as Int
-
 
         if (position < listQuestion.size) {
 //            hide buttons of the first fragment
@@ -111,10 +109,6 @@ class FragmentQuiz : Fragment() {
                 if (text == listQuestion[position].correctAnswer) {
                     score += 1
                 }
-
-//                if (userCheckedId != 0){
-//                    (radioGroup.findViewById(userCheckedId) as RadioButton).isChecked = true
-//                }
             }
 
             nextButton.setOnClickListener {
@@ -124,7 +118,6 @@ class FragmentQuiz : Fragment() {
                         newInstance(
                             position,
                             score,
-                            radioGroup.checkedRadioButtonId,
                             userAnswer
                         )
                     )
@@ -151,12 +144,11 @@ class FragmentQuiz : Fragment() {
     }
 
     companion object {
-        fun newInstance(position: Int, score: Int, userOptionId: Int, userOption:ArrayList<String>): FragmentQuiz {
+        fun newInstance(position: Int, score: Int, userOption:ArrayList<String>): FragmentQuiz {
             val fragment = FragmentQuiz()
             fragment.arguments = Bundle().apply {
                 putInt(POSITION, position)
                 putInt(SCORE, score)
-                putInt(USER_OPTION_ID, userOptionId)
                 putStringArrayList(USER_OPTION, userOption)
             }
             return fragment
@@ -164,7 +156,6 @@ class FragmentQuiz : Fragment() {
 
         private const val POSITION = "POSITION"
         private const val SCORE = "SCORE"
-        private const val USER_OPTION_ID = "USER_OPTION_ID"
         private const val USER_OPTION = "USER_OPTION"
     }
 }
